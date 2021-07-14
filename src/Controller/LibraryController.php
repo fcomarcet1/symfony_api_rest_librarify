@@ -14,7 +14,7 @@ class LibraryController extends AbstractController
 {
     
     /**
-     * @Route("/books", name="books_get")
+     * @Route("/list", name="books_get")
      */
     public function list(Request $request, BookRepository $bookRepository): JsonResponse
     {
