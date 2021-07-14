@@ -5,14 +5,13 @@ namespace App\Controller;
 use App\Entity\Book;
 use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LibraryController extends AbstractController
 {
-    
     /**
      * @Route("/list", name="books_get")
      */
@@ -25,22 +24,22 @@ class LibraryController extends AbstractController
             $booksAsArray[] = [
                 'id' => $book->getId(),
                 'title' => $book->getTitle(),
-                'image' => $book->getImage()
+                'image' => $book->getImage(),
             ];
-        };
+        }
 
         $response = new JsonResponse();
         $response->setData([
             'success' => true,
-            'data' => $booksAsArray
+            'data' => $booksAsArray,
         ]);
-        
+
         return $response;
     }
 
     /**
-    * @Route("/book/create", name="create_book")
-    */
+     * @Route("/book/create", name="create_book")
+     */
     public function createBook(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $book = new Book();
@@ -53,8 +52,9 @@ class LibraryController extends AbstractController
             $response->setData([
                 'success' => false,
                 'error' => 'Title cannot be empty',
-                'data' => null
+                'data' => null,
             ]);
+
             return $response;
         }
 
@@ -66,12 +66,10 @@ class LibraryController extends AbstractController
             'success' => true,
             'data' => [
                 [
-                    /* 'id' => 3,
-                    'title' => $title, */
                     'id' => $book->getId(),
-                    'title' => $book->getTitle()
-                ]
-            ]
+                    'title' => $book->getTitle(),
+                ],
+            ],
         ]);
 
         return $response;
