@@ -66,8 +66,8 @@ class LibraryController extends AbstractController
             'success' => true,
             'data' => [
                 [
-                    'id' => 3,
-                    'title' => $title,
+                    /* 'id' => 3,
+                    'title' => $title, */
                     'id' => $book->getId(),
                     'title' => $book->getTitle()
                 ]
