@@ -6,7 +6,7 @@ use League\Flysystem\FilesystemOperator;
 
 class FileUploader
 {
-    private $storage;
+    private $booksStorage;
     
     // The variable name $defaultStorage matters: it needs to be the camelized version
     // of the name of your storage.

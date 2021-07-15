@@ -17,7 +17,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 class BookController extends AbstractFOSRestController
 {
     /**
-     * List of all books.
+     * Books list.
      *
      * @Rest\Get(path="/books")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
@@ -25,10 +25,11 @@ class BookController extends AbstractFOSRestController
     public function getAction(BookRepository $bookRepository)
     {
         return $bookRepository->findAll();
+
     }
 
     /**
-     * Create new book opcional upload base64Image.
+     * Creates a Book resource.
      *
      * @Rest\Post(path="/books")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
