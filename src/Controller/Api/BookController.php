@@ -4,14 +4,15 @@ namespace App\Controller\Api;
 
 use App\Entity\Book;
 use App\Form\Model\BookDto;
+use App\Service\FileUploader;
 use App\Form\Type\BookFormType;
 use App\Repository\BookRepository;
-use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 
 class BookController extends AbstractFOSRestController
 {
@@ -42,18 +43,22 @@ class BookController extends AbstractFOSRestController
         $form = $this->createForm(BookFormType::class, $bookDto);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            //$data = $form->getData();
+        if (!$form->isSubmitted()) {
+            return new Response('', Response::HTTP_BAD_REQUEST);
+        }
 
-            // save image(base64Image) in public/storage/images/books service FileUploader
-            $filename = $fileUploader->uploadBase64File($bookDto->base64Image);
-
+        if ($form->isValid()) {
             $book = new Book();
             $book->setTitle($bookDto->title);
-            $book->setImage($filename);
+            if ($bookDto->base64Image) {
+                // Upload base64Image
+                $filename = $fileUploader->uploadBase64File($bookDto->base64Image);
+                $book->setImage($filename);
+            }
+
             $em->persist($book);
             $em->flush();
-
+            
             return $book;
         }
 
