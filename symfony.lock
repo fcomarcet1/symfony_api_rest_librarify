@@ -100,6 +100,25 @@
     "laminas/laminas-code": {
         "version": "4.4.2"
     },
+    "league/flysystem": {
+        "version": "2.1.1"
+    },
+    "league/flysystem-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "446659fccbea4a0076de3d59268fc7d478c48296"
+        },
+        "files": [
+            "./config/packages/flysystem.yaml",
+            "./var/storage/.gitignore"
+        ]
+    },
+    "league/mime-type-detection": {
+        "version": "1.7.0"
+    },
     "monolog/monolog": {
         "version": "2.3.0"
     },

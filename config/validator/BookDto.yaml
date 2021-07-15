@@ -1,7 +1,6 @@
-App\Entity\Book:
+App\Form\Model\BookDto:
     properties:
         title:
-            - Unique: ~
             - NotBlank: ~
             - Length:
                 min: 3
