@@ -6,6 +6,7 @@ use App\Entity\Book;
 use App\Form\Model\BookDto;
 use App\Form\Type\BookFormType;
 use App\Repository\BookRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -34,7 +35,7 @@ class BookController extends AbstractFOSRestController
     public function postAction(
         Request $request,
         EntityManagerInterface $em,
-        FilesystemOperator $booksStorage
+        FileUploader $fileUploader
     ) {
         // Create new DTO
         $bookDto = new BookDto();
@@ -44,11 +45,8 @@ class BookController extends AbstractFOSRestController
         if ($form->isSubmitted() && $form->isValid()) {
             //$data = $form->getData();
 
-            // save image(base64Image) in public/storage/images/books
-            $extension = explode('/', mime_content_type($bookDto->base64Image))[1];
-            $data = explode(',', $bookDto->base64Image);
-            $filename = sprintf('%s.%s', uniqid('book_', true), $extension);
-            $booksStorage->write($filename, base64_decode($data[1]));
+            // save image(base64Image) in public/storage/images/books service FileUploader
+            $filename = $fileUploader->uploadBase64File($bookDto->base64Image);
 
             $book = new Book();
             $book->setTitle($bookDto->title);
