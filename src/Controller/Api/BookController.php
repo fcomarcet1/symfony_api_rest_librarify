@@ -86,27 +86,6 @@ class BookController extends AbstractFOSRestController
         }
         $bookDto = BookDto::createFromBook($book);
 
-        /**
-         * PASOS:
-         *      Obtener categorias existentes:
-         *          - foreach ($book->getCategories() as $category)
-         *              - Crear un nuevo categoryDto
-         *              - Añadir categorias del bookDto al categoryDto
-         *              - Añadir las categorias de categoryDto a originalCategories.
-         *
-         *      Una vez creado el form asociado al BookDto y comprobado que se ha enviado
-         *      y es valido:
-         *          Eliminar categoria:
-         *              Ver que categorias hemos eliminado
-         *              foreach ($originalCategories as $originalCategoryDto)
-         *                  Si no se encuentra en el array de categories que se ha submiteado
-         *                    (Tenemos los datos enviados en BookDto)
-         *
-         *
-         *
-         *          Añadir categoria:
-         */
-
         // Get categories if exists
         $originalCategories = new ArrayCollection();
         foreach ($book->getCategories() as $category) {
@@ -124,8 +103,8 @@ class BookController extends AbstractFOSRestController
             return new Response('', Response::HTTP_BAD_REQUEST);
         }
         if ($form->isValid()) {
-            //  User remove categories
-            // get categories
+            // remove categories
+            // get categories , Once the form is valid use BookDto(data client is here)
             foreach ($originalCategories as $originalCategoryDto) {
                 if (!in_array($originalCategoryDto, $bookDto->categories)) {
                     $category = $categoryRepository->find($originalCategoryDto->id);
