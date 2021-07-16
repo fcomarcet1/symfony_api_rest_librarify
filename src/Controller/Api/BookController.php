@@ -55,9 +55,7 @@ class BookController extends AbstractFOSRestController
      */
     public function getSingleAction(
         int $id,
-        BookFormProcessor $bookFormProcessor,
-        BookManager $bookManager,
-        Request $request
+        BookManager $bookManager
     ) {
         // find book to edit
         $book = $bookManager->find($id);
