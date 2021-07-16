@@ -25,6 +25,8 @@ class BookController extends AbstractFOSRestController
     }
 
     /**
+     * Create new book.
+     *
      * @Rest\Post(path="/books")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
      */
@@ -33,6 +35,7 @@ class BookController extends AbstractFOSRestController
         BookFormProcessor $bookFormProcessor,
         Request $request
     ) {
+        // create new bookDto from book
         $book = $bookManager->create();
 
         // Call bookFormProcessor service he receives $book & $request
@@ -45,6 +48,29 @@ class BookController extends AbstractFOSRestController
     }
 
     /**
+     * Get book detail.
+     *
+     * @Rest\Get(path="/books/{id}", requirements={"id"="\d+"})
+     * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function getSingleAction(
+        int $id,
+        BookFormProcessor $bookFormProcessor,
+        BookManager $bookManager,
+        Request $request
+    ) {
+        // find book to edit
+        $book = $bookManager->find($id);
+        if (!$book) {
+            return View::create('Book not found', Response::HTTP_BAD_REQUEST);
+        }
+
+        return $book;
+    }
+
+    /**
+     * Edit book.
+     *
      * @Rest\Post(path="/books/{id}", requirements={"id"="\d+"})
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
      */
