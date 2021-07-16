@@ -6,7 +6,7 @@ use App\Entity\Book;
 
 class BookDto
 {
-    public string $title;
+    public $title;
     public $base64Image;
     public $categories;
 
