@@ -15,7 +15,12 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 class ApiKeyAuthenticator extends AbstractAuthenticator
 {
-    public const API_TOKEN = 'LIBRARIFY';
+    private string $appApiToken;
+
+    public function __construct(string $appApiToken)
+    {
+        $this->appApiToken = $appApiToken;
+    }
 
     /**
      * Called on every request to decide if this authenticator should be
@@ -37,7 +42,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
 
-        if (self::API_TOKEN !== $apiToken) {
+        if ($this->appApiToken !== $apiToken) {
             throw new CustomUserMessageAuthenticationException('Invalid API token provided');
         }
 
