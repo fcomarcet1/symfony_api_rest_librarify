@@ -58,6 +58,50 @@ class CategoryController extends AbstractFOSRestController
     }
 
     /**
+     * Edit category.
+     *
+     * @Rest\Post(path="/categories/{id}", requirements={"id"="\d+"})
+     * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function editAction(
+        int $id,
+        Request $request,
+        CategoryManager $categoryManager
+    ) {
+        // find category to edit
+        $category = $categoryManager->find($id);
+        if (!$category) {
+            return View::create('Category not found, cannot delete this category', Response::HTTP_BAD_REQUEST);
+        }
+
+        // TODO: Create CategoryFormProcessor service.
+        $categoryDto = new CategoryDto();
+        $form = $this->createForm(CategoryFormType::class, $categoryDto);
+        $form->handleRequest($request);
+
+        if ($form->isValid() && $form->isSubmitted()) {
+            $category->setName($categoryDto->name);
+            $categoryManager->flush();
+            // add$categoryManager->reload($category);
+
+            $data = [
+                'message' => 'Category edited successfully',
+                'category' => $category,
+            ];
+
+            return View::create($data, Response::HTTP_OK);
+
+            /* $data = [
+                'message' => 'Category created',
+                'data' => $category,
+            ];
+            return View::create($data, Response::HTTP_CREATED); */
+        }
+
+        return $form;
+    }
+
+    /**
      * Delete Category.
      *
      * @Rest\Delete(path="/categories/{id}", requirements={"id"="\d+"})

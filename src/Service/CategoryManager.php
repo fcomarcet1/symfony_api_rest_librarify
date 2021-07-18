@@ -34,6 +34,11 @@ class CategoryManager
         return $category;
     }
 
+    public function flush(): void
+    {
+        $this->em->flush();
+    }
+
     public function persist(Category $category): Category
     {
         $this->em->persist($category);
