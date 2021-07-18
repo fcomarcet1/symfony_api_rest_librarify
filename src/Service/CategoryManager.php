@@ -55,4 +55,10 @@ class CategoryManager
 
         return $category;
     }
+
+    public function delete(Category $category)
+    {
+        $this->em->remove($category);
+        $this->em->flush();
+    }
 }

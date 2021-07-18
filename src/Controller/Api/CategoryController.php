@@ -56,4 +56,28 @@ class CategoryController extends AbstractFOSRestController
 
         return $form;
     }
+
+    /**
+     * Delete Category.
+     *
+     * @Rest\Delete(path="/categories/{id}", requirements={"id"="\d+"})
+     * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function deleteAction(int $id, CategoryManager $categoryManager)
+    {
+        //$book = $bookRepository->find($id);
+        $category = $categoryManager->find($id);
+        if (!$category) {
+            return View::create('Category not found, cannot delete this category', Response::HTTP_BAD_REQUEST);
+        }
+
+        $categoryManager->delete($category);
+
+        $data = [
+            'message' => 'Category successfully deleted',
+            'category' => $category->getName(),
+        ];
+
+        return View::create($data, Response::HTTP_OK);
+    }
 }
