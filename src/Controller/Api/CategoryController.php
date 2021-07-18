@@ -90,12 +90,6 @@ class CategoryController extends AbstractFOSRestController
             ];
 
             return View::create($data, Response::HTTP_OK);
-
-            /* $data = [
-                'message' => 'Category created',
-                'data' => $category,
-            ];
-            return View::create($data, Response::HTTP_CREATED); */
         }
 
         return $form;
