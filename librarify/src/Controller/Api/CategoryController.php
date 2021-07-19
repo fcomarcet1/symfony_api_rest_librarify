@@ -2,7 +2,6 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Category;
 use App\Form\Model\CategoryDto;
 use App\Form\Type\CategoryFormType;
 use App\Service\CategoryFormProcessor;
@@ -32,11 +31,8 @@ class CategoryController extends AbstractFOSRestController
      * @Rest\Post(path="/categories")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
      */
-    public function postAction(
-        Request $request,
-        CategoryManager $categoryManager,
-        CategoryFormProcessor $categoryFormProcessor
-    ) {
+    public function postAction(Request $request, CategoryManager $categoryManager)
+    {
         $categoryDto = new CategoryDto();
         $form = $this->createForm(CategoryFormType::class, $categoryDto);
         $form->handleRequest($request);
@@ -46,14 +42,14 @@ class CategoryController extends AbstractFOSRestController
             $category = $categoryManager->create();
             $category->setName($categoryDto->name);
             $categoryManager->save($category);
+            //return $category;
 
-            return $category;
-
-            /* $data = [
+            $data = [
                 'message' => 'Category created',
                 'data' => $category,
             ];
-            return View::create($data, Response::HTTP_CREATED); */
+
+            return View::create($data, Response::HTTP_CREATED);
         }
 
         return $form;
@@ -85,25 +81,6 @@ class CategoryController extends AbstractFOSRestController
         $data = $category ?? $error;
 
         return View::create($data, $statusCode);
-        // TODO: Create CategoryFormProcessor service.
-        /* $categoryDto = new CategoryDto();
-        $form = $this->createForm(CategoryFormType::class, $categoryDto);
-        $form->handleRequest($request);
-
-        if ($form->isValid() && $form->isSubmitted()) {
-            $category->setName($categoryDto->name);
-            $categoryManager->flush();
-            // add$categoryManager->reload($category);
-
-            $data = [
-                'message' => 'Category edited successfully',
-                'category' => $category,
-            ];
-
-            return View::create($data, Response::HTTP_OK);
-        }
-
-        return $form;*/
     }
 
     /**
