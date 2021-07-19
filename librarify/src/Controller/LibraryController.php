@@ -48,6 +48,8 @@ class LibraryController extends AbstractController
         $params = json_decode($request->getContent());
         $title = $params->title;
 
+        
+
         if (empty($title)) {
             $response->setData([
                 'success' => false,

@@ -3,6 +3,7 @@ FROM php:8.0-fpm-buster
 ARG TIMEZONE
 
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/docker-php-config.ini
+#COPY docker/php/wait-for-it.sh /usr/bin/wait-for-it
 
 RUN apt-get update && apt-get install -y \
     gnupg \
@@ -39,6 +40,10 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 RUN git config --global user.email "fcomarcet1@gmail.com" \ 
     && git config --global user.name "fcomarcet1"
+
+# COPY ../librarify/vendor /var/www/librarify/vendor
+# VOLUME /symfony/var
+# VOLUME /symfony/vendor
 
 WORKDIR /var/www/librarify
 RUN ls
