@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Category;
 use App\Form\Model\CategoryDto;
 use App\Form\Type\CategoryFormType;
+use App\Service\CategoryFormProcessor;
 use App\Service\CategoryManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -33,7 +34,8 @@ class CategoryController extends AbstractFOSRestController
      */
     public function postAction(
         Request $request,
-        CategoryManager $categoryManager
+        CategoryManager $categoryManager,
+        CategoryFormProcessor $categoryFormProcessor
     ) {
         $categoryDto = new CategoryDto();
         $form = $this->createForm(CategoryFormType::class, $categoryDto);
@@ -66,16 +68,25 @@ class CategoryController extends AbstractFOSRestController
     public function editAction(
         int $id,
         Request $request,
-        CategoryManager $categoryManager
+        CategoryManager $categoryManager,
+        CategoryFormProcessor $categoryFormProcessor
     ) {
         // find category to edit
         $category = $categoryManager->find($id);
         if (!$category) {
-            return View::create('Category not found, cannot delete this category', Response::HTTP_BAD_REQUEST);
+            return View::create('Category not found, cannot edit this category', Response::HTTP_BAD_REQUEST);
         }
 
+        // Call categoryFormProcessor service he receives $category & $request
+        [$category, $error] = ($categoryFormProcessor)($category, $request);
+
+        //If exists $category->Response::HTTP_CREATED else Response::HTTP_BAD_REQUEST
+        $statusCode = $category ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
+        $data = $category ?? $error;
+
+        return View::create($data, $statusCode);
         // TODO: Create CategoryFormProcessor service.
-        $categoryDto = new CategoryDto();
+        /* $categoryDto = new CategoryDto();
         $form = $this->createForm(CategoryFormType::class, $categoryDto);
         $form->handleRequest($request);
 
@@ -92,7 +103,7 @@ class CategoryController extends AbstractFOSRestController
             return View::create($data, Response::HTTP_OK);
         }
 
-        return $form;
+        return $form;*/
     }
 
     /**
