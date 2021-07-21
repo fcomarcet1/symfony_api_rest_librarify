@@ -65,7 +65,7 @@ class BookFormProcessor
             // remove categories
             // get categories , Once the form is valid use BookDto(data client is here)
             foreach ($originalCategories as $originalCategoryDto) {
-                if (!in_array($originalCategoryDto, $bookDto->categories)) {
+                if (!\in_array($originalCategoryDto, $bookDto->categories)) {
                     $category = $this->categoryManager->find($originalCategoryDto->id);
                     $book->removeCategory($category);
                 }

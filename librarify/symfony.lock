@@ -146,6 +146,18 @@
     "phpspec/prophecy": {
         "version": "1.13.0"
     },
+    "phpstan/extension-installer": {
+        "version": "1.1.0"
+    },
+    "phpstan/phpstan": {
+        "version": "0.12.93"
+    },
+    "phpstan/phpstan-doctrine": {
+        "version": "0.12.42"
+    },
+    "phpstan/phpstan-symfony": {
+        "version": "0.12.41"
+    },
     "phpunit/php-code-coverage": {
         "version": "9.2.6"
     },
@@ -526,6 +538,9 @@
     },
     "symfony/yaml": {
         "version": "v5.3.3"
+    },
+    "symplify/easy-coding-standard": {
+        "version": "9.4.22"
     },
     "theseer/tokenizer": {
         "version": "1.2.0"

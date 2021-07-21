@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CategoryFormProcessor
 {
+    private $bookManager;
     private $categoryManager;
     private $formFactory;
 
