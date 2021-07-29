@@ -4,15 +4,8 @@ App\Entity\Category:
     repositoryClass: App\Repository\CategoryRepository
     id:
         id:
-            type: integer
-            scale: null
-            length: null
-            unique: false
-            nullable: false
-            precision: null
-            id: true
-            generator:
-                strategy: IDENTITY
+            type: uuid
+        
     fields:
         name:
             type: string

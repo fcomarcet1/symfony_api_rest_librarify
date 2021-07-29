@@ -7,6 +7,7 @@ use App\Form\Model\BookDto;
 use App\Form\Model\CategoryDto;
 use App\Form\Type\BookFormType;
 use Doctrine\Common\Collections\ArrayCollection;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -66,7 +67,7 @@ class BookFormProcessor
             // get categories , Once the form is valid use BookDto(data client is here)
             foreach ($originalCategories as $originalCategoryDto) {
                 if (!\in_array($originalCategoryDto, $bookDto->categories)) {
-                    $category = $this->categoryManager->find($originalCategoryDto->id);
+                    $category = $this->categoryManager->find(Uuid::fromString($originalCategoryDto->id));
                     $book->removeCategory($category);
                 }
             }
@@ -75,7 +76,11 @@ class BookFormProcessor
             foreach ($bookDto->categories as $newCategoryDto) {
                 if (!$originalCategories->contains($newCategoryDto)) {
                     // Si le pasamos el id por el json no crea nueva category ->find($newCategoryDto->id ?? 0)
-                    $category = $this->categoryManager->find($newCategoryDto->id ?? 0);
+                    //$category = $this->categoryManager->find($newCategoryDto->id ?? 0);
+                    $category = null;
+                    if (null !== $newCategoryDto->id) {
+                        $category = $this->categoryManager->find(Uuid::fromString($newCategoryDto->id));
+                    }
                     if (!$category) {
                         $category = $this->categoryManager->create();
                         $category->setName($newCategoryDto->name);

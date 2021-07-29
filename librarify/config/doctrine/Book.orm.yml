@@ -4,15 +4,8 @@ App\Entity\Book:
     repositoryClass: App\Repository\BookRepository
     id:
         id:
-            type: integer
-            scale: null
-            length: null
-            unique: false
-            nullable: false
-            precision: null
-            id: true
-            generator:
-                strategy: IDENTITY
+            type: uuid
+        
     fields:
         title:
             type: string
