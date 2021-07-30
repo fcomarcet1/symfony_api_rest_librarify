@@ -28,7 +28,7 @@ class BookController extends AbstractFOSRestController
     }
 
     /**
-     * Create new book.
+     * Create new book user can select previous categories or add new categories.
      *
      * @Rest\Post(path="/books")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)

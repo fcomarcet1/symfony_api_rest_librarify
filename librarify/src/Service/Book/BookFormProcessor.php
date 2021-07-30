@@ -47,25 +47,29 @@ class BookFormProcessor
         $originalCategories = new ArrayCollection();
 
         if (null === $bookId) {
+            // create new book with uuid && create new BookDto
             $book = Book::create();
             $bookDto = BookDto::createEmpty();
         } else {
+            // Get book
             $book = ($this->getBook)($bookId);
-
             $bookDto = BookDto::createFromBook($book);
+
+            // Get categories if exists --> originalCategories
             foreach ($book->getCategories() as $category) {
+                // Create categoryDto from category
                 $categoryDto = CategoryDto::createFromCategory($category);
+                // add categories to categoryDto
                 $bookDto->categories[] = $categoryDto;
+                // add categories to $originalCategories
                 $originalCategories->add($categoryDto);
             }
         }
-
-        dump($book);
-        exit();
-
+        // Create new form-> vinculated --> bookDto class
         $form = $this->formFactory->create(BookFormType::class, $bookDto);
         $form->handleRequest($request);
         if (!$form->isSubmitted()) {
+            // return [success, error]
             return [null, 'Form is not submitted'];
         }
         if (!$form->isValid()) {
@@ -73,6 +77,7 @@ class BookFormProcessor
         }
 
         // Remove categories
+        // get categories , Once the form is valid use BookDto(data client is here
         foreach ($originalCategories as $originalCategoryDto) {
             if (!\in_array($originalCategoryDto, $bookDto->categories)) {
                 $category = ($this->getCategory)($originalCategoryDto->getId());
@@ -94,12 +99,15 @@ class BookFormProcessor
             }
         }
         $book->setTitle($bookDto->title);
+
+        // Save base64Image
         if ($bookDto->base64Image) {
             $filename = $this->fileUploader->uploadBase64File($bookDto->base64Image);
             $book->setImage($filename);
         }
         $this->bookRepository->save($book);
 
+        // return [success, error]
         return [$book, null];
     }
 }
