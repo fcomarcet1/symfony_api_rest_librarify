@@ -28,6 +28,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, [
         // skip paths with legacy code
         __DIR__ . '/src/Migrations',
+        __DIR__ . '/src/Service/Utils',
         __DIR__ . '/tests',
     ]);
 };

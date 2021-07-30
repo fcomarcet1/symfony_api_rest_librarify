@@ -20,6 +20,34 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
+    public function persist(Category $category): Category
+    {
+        $this->getEntityManager()->persist($category);
+
+        return $category;
+    }
+
+    public function save(Category $category): Category
+    {
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+
+        return $category;
+    }
+
+    public function reload(Category $category): Category
+    {
+        $this->getEntityManager()->refresh($category);
+
+        return $category;
+    }
+
+    public function delete(Category $category): void
+    {
+        $this->getEntityManager()->remove($category);
+        $this->getEntityManager()->flush();
+    }
+
     // /**
     //  * @return Category[] Returns an array of Category objects
     //  */

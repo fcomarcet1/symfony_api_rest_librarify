@@ -4,6 +4,7 @@ parameters:
         - src
     excludes_analyse:
         - %rootDir%/src/Migrations
+        - %rootDir%/src/Service/Utils
     symfony:
         container_xml_path: 'var/cache/dev/App_KernelDevDebugContainer.xml'
     doctrine:
