@@ -7,6 +7,7 @@ use App\Form\Model\CategoryDto;
 use App\Form\Type\CategoryFormType;
 use App\Repository\CategoryRepository;
 use App\Service\Category\CategoryFormProcessor;
+use App\Service\Category\CheckUniqueCategory;
 use App\Service\Category\DeleteCategory;
 use App\Service\Category\GetCategory;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -29,13 +30,24 @@ class CategoryController extends AbstractFOSRestController
     }
 
     /**
+     * Create a new unique category.
+     *
      * @Rest\Post(path="/categories")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
      */
     public function postAction(
         Request $request,
-        CategoryFormProcessor $categoryFormProcessor
+        CategoryFormProcessor $categoryFormProcessor,
+        CheckUniqueCategory $checkUniqueCategory
     ) {
+        //check if category exists already.
+        $issetCategory = ($checkUniqueCategory)($request->get('name'));
+        if (!$issetCategory) {
+            $data = ['message' => 'This category already exists.'];
+
+            return View::create($data, Response::HTTP_OK);
+        }
+
         [$category, $error] = ($categoryFormProcessor)($request);
         $statusCode = $category ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
         $data = $category ?? $error;
