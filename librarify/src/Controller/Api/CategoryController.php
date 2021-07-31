@@ -93,7 +93,7 @@ class CategoryController extends AbstractFOSRestController
     /**
      * Edit Category.
      *
-     * @Rest\Post(path="/category/{id}")
+     * @Rest\Post(path="/categories/{id}")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
      */
     public function editAction(
@@ -108,8 +108,8 @@ class CategoryController extends AbstractFOSRestController
             return View::create('Category not found', Response::HTTP_BAD_REQUEST);
         }
 
-        // Call bookFormProcessor service he receives $book & $request
-        [$category, $error] = ($categoryFormProcessor)($request);
+        // Call categoryFormProcessor service
+        [$category, $error] = ($categoryFormProcessor)($request, $id);
 
         //If exists $book->Response::HTTP_CREATED else Response::HTTP_BAD_REQUEST
         $statusCode = $category ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
@@ -121,7 +121,7 @@ class CategoryController extends AbstractFOSRestController
     /**
      * Delete Category.
      *
-     * @Rest\Delete(path="/category/{id}", requirements={"id"="\d+"})
+     * @Rest\Delete(path="/categories/{id}")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
      */
     public function deleteAction(string $id, DeleteCategory $deleteCategory)

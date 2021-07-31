@@ -35,6 +35,11 @@ class CategoryRepository extends ServiceEntityRepository
         return $category;
     }
 
+    public function update(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function reload(Category $category): Category
     {
         $this->getEntityManager()->refresh($category);

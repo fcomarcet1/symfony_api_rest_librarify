@@ -10,6 +10,11 @@ class CategoryDto
     public ?UuidInterface $id = null;
     public ?string $name = null;
 
+    public static function createEmpty(): self
+    {
+        return new self();
+    }
+
     public function getId(): ?UuidInterface
     {
         return $this->id;
@@ -18,6 +23,13 @@ class CategoryDto
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setName($name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     // instance new obj CategoryDto an set id and name
