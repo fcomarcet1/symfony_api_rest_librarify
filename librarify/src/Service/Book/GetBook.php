@@ -16,6 +16,9 @@ class GetBook
         $this->bookRepository = $bookRepository;
     }
 
+    /**
+     * @throws BookNotFound
+     */
     public function __invoke(string $id): Book
     {
         $book = $this->bookRepository->find(Uuid::fromString($id));
