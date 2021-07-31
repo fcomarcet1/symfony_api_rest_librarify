@@ -9,7 +9,7 @@ use Ramsey\Uuid\UuidInterface;
 
 class Book
 {
-    private $id;
+    private UuidInterface $id;
     private $title;
     private $image;
     private $categories;
