@@ -2,9 +2,9 @@
 
 namespace App\Service\Category;
 
-use App\Repository\CategoryRepository;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Repository\CategoryRepository;
+use App\Model\Exception\Category\CategoryNotFound;
 
 class DeleteCategory
 {
@@ -21,8 +21,7 @@ class DeleteCategory
         // Find book to delete
         $category = $this->categoryRepository->find(Uuid::fromString($id));
         if (!$category) {
-            //throw new Exception('That book does not exist');
-            throw new HttpException(404, 'That book does not exist');
+            CategoryNotFound::throwException();
         }
 
         // delete book
