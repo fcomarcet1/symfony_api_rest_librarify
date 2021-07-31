@@ -16,6 +16,9 @@ class GetCategory
         $this->categoryRepository = $categoryRepository;
     }
 
+    /**
+     * @throws CategoryNotFound
+     */
     public function __invoke(string $id): ?Category
     {
         $category = $this->categoryRepository->find(Uuid::fromString($id));

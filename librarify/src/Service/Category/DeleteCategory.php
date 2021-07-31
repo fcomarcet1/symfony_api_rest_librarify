@@ -16,6 +16,9 @@ class DeleteCategory
         $this->categoryRepository = $categoryRepository;
     }
 
+    /**
+     * @throws CategoryNotFound
+     */
     public function __invoke(string $id)
     {
         // Find book to delete

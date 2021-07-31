@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Book;
+use App\Model\Exception\Book\BookNotFound;
 use App\Repository\BookRepository;
 use App\Service\Book\BookFormProcessor;
 use App\Service\Book\DeleteBook;
@@ -22,7 +23,7 @@ class BookController extends AbstractFOSRestController
      * @Rest\Get(path="/books")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
      */
-    public function getAction(BookRepository $bookRepository)
+    public function getAction(BookRepository $bookRepository): array
     {
         return $bookRepository->findAll();
     }
@@ -52,6 +53,7 @@ class BookController extends AbstractFOSRestController
      *
      * @Rest\Get(path="/books/{id}")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
+     * @throws BookNotFound
      */
     public function getSingleAction(string $id, GetBook $getBook)
     {
@@ -70,6 +72,7 @@ class BookController extends AbstractFOSRestController
      *
      * @Rest\Post(path="/books/{id}")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
+     * @throws BookNotFound
      */
     public function editAction(
         string $id,

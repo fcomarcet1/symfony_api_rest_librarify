@@ -41,12 +41,12 @@ class CategoryFormType extends AbstractType
     }
 
     // soluciona tener que enviar el nombre del form de symfony form_book
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return '';
     }
 
-    public function getName()
+    public function getName(): string
     {
         return '';
     }

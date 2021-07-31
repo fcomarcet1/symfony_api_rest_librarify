@@ -6,6 +6,7 @@ use App\Entity\Book;
 use App\Form\Model\BookDto;
 use App\Form\Model\CategoryDto;
 use App\Form\Type\BookFormType;
+use App\Model\Exception\Book\BookNotFound;
 use App\Repository\BookRepository;
 use App\Service\Category\CreateCategory;
 use App\Service\Category\GetCategory;
@@ -39,6 +40,9 @@ class BookFormProcessor
         $this->formFactory = $formFactory;
     }
 
+    /**
+     * @throws BookNotFound
+     */
     public function __invoke(Request $request, ?string $bookId = null): array
     {
         $book = null;

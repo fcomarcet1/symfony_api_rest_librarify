@@ -2,6 +2,7 @@
 
 namespace App\Service\Book;
 
+use App\Model\Exception\Book\BookNotFound;
 use App\Repository\BookRepository;
 
 class DeleteBook
@@ -15,9 +16,15 @@ class DeleteBook
         $this->bookRepository = $bookRepository;
     }
 
+    /**
+     * @throws BookNotFound
+     */
     public function __invoke(string $id)
     {
         $book = ($this->getBook)($id);
+        if (!$book) {
+            BookNotFound::throwException();
+        }
         $this->bookRepository->delete($book);
     }
 }

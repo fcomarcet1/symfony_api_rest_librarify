@@ -26,7 +26,7 @@ class CategoryController extends AbstractFOSRestController
      * @Rest\Get(path="/categories")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
      */
-    public function getAction(CategoryRepository $categoryRepository)
+    public function getAction(CategoryRepository $categoryRepository): array
     {
         return $categoryRepository->findAll();
     }
