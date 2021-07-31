@@ -10,6 +10,7 @@ use App\Service\Category\CategoryFormProcessor;
 use App\Service\Category\CheckUniqueCategory;
 use App\Service\Category\DeleteCategory;
 use App\Service\Category\GetCategory;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -27,6 +28,23 @@ class CategoryController extends AbstractFOSRestController
     public function getAction(CategoryRepository $categoryRepository)
     {
         return $categoryRepository->findAll();
+    }
+
+    /**
+     * Get category detail.
+     *
+     * @Rest\Get(path="/categories/{id}")
+     * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function getSingleAction(string $id, GetCategory $getCategory)
+    {
+        try {
+            $category = ($getCategory)($id);
+        } catch (Exception $exception) {
+            return View::create('Category not found', Response::HTTP_BAD_REQUEST);
+        }
+
+        return $category;
     }
 
     /**
