@@ -16,6 +16,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class CategoryController extends AbstractFOSRestController
 {
@@ -116,24 +117,18 @@ class CategoryController extends AbstractFOSRestController
      */
     public function editAction(
         string $id,
-        GetCategory $getCategory,
         CategoryFormProcessor $categoryFormProcessor,
         Request $request
     ) {
-        // Call service to find category to edit
-        $category = ($getCategory)($id);
-        if (!$category) {
+        try {
+            [$category, $error] = ($categoryFormProcessor)($request, $id);
+            $statusCode = $category ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
+            $data = $category ?? $error;
+
+            return View::create($data, $statusCode);
+        } catch (Throwable $t) {
             return View::create('Category not found', Response::HTTP_BAD_REQUEST);
         }
-
-        // Call categoryFormProcessor service
-        [$category, $error] = ($categoryFormProcessor)($request, $id);
-
-        //If exists $book->Response::HTTP_CREATED else Response::HTTP_BAD_REQUEST
-        $statusCode = $category ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
-        $data = $category ?? $error;
-
-        return View::create($data, $statusCode);
     }
 
     /**
