@@ -53,6 +53,7 @@ class BookController extends AbstractFOSRestController
      *
      * @Rest\Get(path="/books/{id}")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
+     *
      * @throws BookNotFound
      */
     public function getSingleAction(string $id, GetBook $getBook)
@@ -72,6 +73,7 @@ class BookController extends AbstractFOSRestController
      *
      * @Rest\Post(path="/books/{id}")
      * @Rest\View(serializerGroups={"book"}, serializerEnableMaxDepthChecks=true)
+     *
      * @throws BookNotFound
      */
     public function editAction(

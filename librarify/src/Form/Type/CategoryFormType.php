@@ -19,17 +19,17 @@ class CategoryFormType extends AbstractType
             ->add('name', TextType::class);
 
         $builder->get('id')->addModelTransformer(new CallbackTransformer(
-                function ($id) {
+            function ($id) {
                     if (null === $id) {
                         return '';
                     }
 
                     return $id->toString();
                 },
-                function ($id) {
+            function ($id) {
                     return null === $id ? null : Uuid::fromString($id);
                 }
-            ));
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

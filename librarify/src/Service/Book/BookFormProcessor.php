@@ -11,7 +11,6 @@ use App\Repository\BookRepository;
 use App\Service\Category\CreateCategory;
 use App\Service\Category\GetCategory;
 use App\Service\FileUploader;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -47,8 +46,6 @@ class BookFormProcessor
     {
         $book = null;
         $bookDto = null;
-        /** @var CategoryDto[]|ArrayCollection */
-        $originalCategories = new ArrayCollection();
 
         if (null === $bookId) {
             // create new book with uuid && create new BookDto
@@ -57,16 +54,12 @@ class BookFormProcessor
         } else {
             // Get book
             $book = ($this->getBook)($bookId);
+            // Create new BookDto from this book
             $bookDto = BookDto::createFromBook($book);
-
             // Get categories if exists --> originalCategories
             foreach ($book->getCategories() as $category) {
                 // Create categoryDto from category
                 $categoryDto = CategoryDto::createFromCategory($category);
-                // add categories to categoryDto
-                $bookDto->categories[] = $categoryDto;
-                // add categories to $originalCategories
-                $originalCategories->add($categoryDto);
             }
         }
         // Create new form-> vinculated --> bookDto class
@@ -80,35 +73,29 @@ class BookFormProcessor
             return [null, $form];
         }
 
-        // Remove categories
-        // get categories , Once the form is valid use BookDto(data client is here
-        foreach ($originalCategories as $originalCategoryDto) {
-            if (!\in_array($originalCategoryDto, $bookDto->categories)) {
-                $category = ($this->getCategory)($originalCategoryDto->getId());
-                $book->removeCategory($category);
-            }
-        }
-
-        // Add categories
+        $categories = [];
         foreach ($bookDto->getCategories() as $newCategoryDto) {
-            if (!$originalCategories->contains($newCategoryDto)) {
-                $category = null;
-                if (null !== $newCategoryDto->getId()) {
-                    $category = ($this->getCategory)($newCategoryDto->getId());
-                }
-                if (!$category) {
-                    $category = ($this->createCategory)($newCategoryDto->getName());
-                }
-                $book->addCategory($category);
+            $category = null;
+            if (null !== $newCategoryDto->getId()) {
+                $category = ($this->getCategory)($newCategoryDto->getId());
             }
+            if (null === $category) {
+                $category = ($this->createCategory)($newCategoryDto->getName());
+            }
+            // categorias que ha enviado el user
+            $categories[] = $category;
         }
-        $book->setTitle($bookDto->title);
 
+        $filename = null;
         // Save base64Image
         if ($bookDto->base64Image) {
             $filename = $this->fileUploader->uploadBase64File($bookDto->base64Image);
-            $book->setImage($filename);
         }
+
+        $book->setImage($filename);
+        $book->setTitle($bookDto->title);
+
+        $book->update($bookDto->title, $filename, ...$categories);
         $this->bookRepository->save($book);
 
         // return [success, error]
