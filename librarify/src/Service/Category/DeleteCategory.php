@@ -2,17 +2,18 @@
 
 namespace App\Service\Category;
 
-use Ramsey\Uuid\Uuid;
-use App\Repository\CategoryRepository;
 use App\Model\Exception\Category\CategoryNotFound;
+use App\Repository\CategoryRepository;
 
 class DeleteCategory
 {
     // Inject service
+    private GetCategory $getCategory;
     private CategoryRepository $categoryRepository;
 
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(CategoryRepository $categoryRepository, GetCategory $getCategory)
     {
+        $this->getCategory = $getCategory;
         $this->categoryRepository = $categoryRepository;
     }
 
@@ -22,7 +23,7 @@ class DeleteCategory
     public function __invoke(string $id)
     {
         // Find book to delete
-        $category = $this->categoryRepository->find(Uuid::fromString($id));
+        $category = ($this->getCategory)($id);
         if (!$category) {
             CategoryNotFound::throwException();
         }

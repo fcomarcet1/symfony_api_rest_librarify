@@ -58,6 +58,7 @@ class BookController extends AbstractFOSRestController
         $book = ($getBook)($id);
 
         if (!$book) {
+            //TODO :test return BookNotFound::throwException();
             return View::create('Book not found', Response::HTTP_BAD_REQUEST);
         }
 
@@ -81,6 +82,7 @@ class BookController extends AbstractFOSRestController
         //Call service to find book to edit
         $book = ($getBook)($id);
         if (!$book) {
+            //TODO :test return BookNotFound::throwException();
             return View::create('Book not found', Response::HTTP_BAD_REQUEST);
         }
         // Call bookFormProcessor service he receives $book & $request
@@ -104,6 +106,7 @@ class BookController extends AbstractFOSRestController
         try {
             ($deleteBook)($id);
         } catch (\Throwable $th) {
+            //TODO :test return BookNotFound::throwException();
             return View::create('Book not found, cannot delete this book', Response::HTTP_BAD_REQUEST);
         }
 

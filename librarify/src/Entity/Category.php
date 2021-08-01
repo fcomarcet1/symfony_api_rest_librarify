@@ -25,6 +25,13 @@ class Category
         return new self(Uuid::uuid4(), $name);
     }
 
+    public function update(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function getId(): UuidInterface
     {
         return $this->id;
@@ -65,13 +72,6 @@ class Category
         if ($this->books->removeElement($book)) {
             $book->removeCategory($this);
         }
-
-        return $this;
-    }
-
-    public function update(string $name): self
-    {
-        $this->name = $name;
 
         return $this;
     }

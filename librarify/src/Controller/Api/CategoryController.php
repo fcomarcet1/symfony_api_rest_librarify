@@ -42,6 +42,7 @@ class CategoryController extends AbstractFOSRestController
         try {
             $category = ($getCategory)($id);
         } catch (Exception $exception) {
+            //TODO: test return CategoryNotFound:::throwException();
             return View::create('Category not found', Response::HTTP_BAD_REQUEST);
         }
 
@@ -127,6 +128,7 @@ class CategoryController extends AbstractFOSRestController
 
             return View::create($data, $statusCode);
         } catch (Throwable $t) {
+            //TODO: test return CategoryNotFound:::throwException();
             return View::create('Category not found', Response::HTTP_BAD_REQUEST);
         }
     }
@@ -143,6 +145,7 @@ class CategoryController extends AbstractFOSRestController
             // Call service to find category and delete
             ($deleteCategory)($id);
         } catch (\Throwable $th) {
+            //TODO: test return CategoryNotFound:::throwException();
             return View::create('Category not found, cannot delete this category', Response::HTTP_BAD_REQUEST);
         }
 
