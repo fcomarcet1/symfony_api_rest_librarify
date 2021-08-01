@@ -8,6 +8,8 @@ class BookDto
 {
     public ?string $title = null;
     public ?string $base64Image = null;
+    public ?string $description = null;
+    public ?int $score = null;
     /** @var \App\Form\Model\CategoryDto[]|null */
     public ?array $categories = [];
 
@@ -26,6 +28,8 @@ class BookDto
     {
         $dto = new self();
         $dto->title = $book->getTitle();
+        /* $dto->description = $book->getDescription();
+        $dto->score = $book->getScore(); */
 
         return $dto;
     }
@@ -46,5 +50,15 @@ class BookDto
     public function getCategories(): ?array
     {
         return $this->categories;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function getScore(): ?int
+    {
+        return $this->score;
     }
 }

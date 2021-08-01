@@ -3,6 +3,7 @@
 namespace App\Service\Book;
 
 use App\Entity\Book;
+use App\Entity\Book\Score;
 use App\Form\Model\BookDto;
 use App\Form\Model\CategoryDto;
 use App\Form\Type\BookFormType;
@@ -92,10 +93,14 @@ class BookFormProcessor
             $filename = $this->fileUploader->uploadBase64File($bookDto->base64Image);
         }
 
-        $book->setImage($filename);
-        $book->setTitle($bookDto->title);
+        $book->update(
+            $bookDto->getTitle(),
+            $filename,
+            $bookDto->getDescription(),
+            Score::create($bookDto->getScore()),
+            ...$categories
+        );
 
-        $book->update($bookDto->title, $filename, ...$categories);
         $this->bookRepository->save($book);
 
         // return [success, error]

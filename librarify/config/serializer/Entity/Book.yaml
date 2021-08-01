@@ -6,6 +6,10 @@ App\Entity\Book:
             groups: ['book']
         image:
             groups: ['book']
+        description:
+            groups: ['book']
+        score:
+            groups: ['book']    
         categories:
             groups: ['book']
         

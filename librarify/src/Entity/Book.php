@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Book\Score;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
@@ -10,19 +11,20 @@ use Ramsey\Uuid\UuidInterface;
 class Book
 {
     private UuidInterface $id;
-    private $title;
-    private $image;
-    private $categories;
+    private string $title;
+    private ?string $image;
+    private Score $score;
+    private ?string $description;
+    /** @var Collection|Category[] */
+    private Collection $categories;
 
     public function __construct(UuidInterface $uuid)
     {
         $this->id = $uuid;
+        $this->score = Score::create();
         $this->categories = new ArrayCollection();
     }
 
-    /**
-     * Create new Book instance with uuid.
-     */
     public static function create(): self
     {
         return new self(Uuid::uuid4());
@@ -57,6 +59,30 @@ class Book
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function setScore(Score $score): self
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    public function getScore(): Score
+    {
+        return $this->score;
+    }
+
     /**
      * @return Collection|Category[]
      */
@@ -76,14 +102,15 @@ class Book
 
     public function removeCategory(Category $category): self
     {
-        $this->categories->removeElement($category);
+        if ($this->categories->contains($category)) {
+            $this->categories->removeElement($category);
+        }
 
         return $this;
     }
 
     public function updateCategories(Category ...$categories)
     {
-        // Get original Categories
         /** @var Category[]|ArrayCollection */
         $originalCategories = new ArrayCollection();
         foreach ($this->categories as $category) {
@@ -108,10 +135,14 @@ class Book
     public function update(
         string $title,
         ?string $image,
+        ?string $description,
+        ?Score $score,
         Category ...$categories
     ) {
         $this->title = $title;
         $this->image = $image;
+        $this->description = $description;
+        $this->score = $score;
         $this->updateCategories(...$categories);
     }
 }

@@ -11,8 +11,8 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class BookNormalizer implements ContextAwareNormalizerInterface
 {
-    private $normalizer;
-    private $urlHelper;
+    private ObjectNormalizer $normalizer;
+    private UrlHelper $urlHelper;
 
     public function __construct(ObjectNormalizer $normalizer, UrlHelper $urlHelper)
     {
@@ -28,9 +28,9 @@ class BookNormalizer implements ContextAwareNormalizerInterface
         // $data['messageTest'] = 'Hola Mundo';
         if (!empty($book->getImage())) {
             // return complete image path
-            $data['image'] = $this->urlHelper->getAbsoluteUrl('/storage/images/books/' . $book->getImage());
+            $data['image'] = $this->urlHelper->getAbsoluteUrl('/storage/images/books/'.$book->getImage());
         }
-    
+
         return $data;
     }
 

@@ -88,7 +88,7 @@ class BookController extends AbstractFOSRestController
             return View::create('Book not found', Response::HTTP_BAD_REQUEST);
         }
         // Call bookFormProcessor service he receives $book & $request
-        [$book, $error] = ($bookFormProcessor)($book, $request);
+        [$book, $error] = ($bookFormProcessor)($request, $id);
 
         //If exists $book->Response::HTTP_CREATED else Response::HTTP_BAD_REQUEST
         $statusCode = $book ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
