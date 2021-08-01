@@ -5,7 +5,7 @@ App\Entity\Book:
     id:
         id:
             type: uuid
-        
+
     fields:
         title:
             type: string
@@ -26,27 +26,31 @@ App\Entity\Book:
             scale: null
             nullable: true
             precision: null
+        createdAt:
+            type: datetime
+            nullable: true
+        readAt:
+            type: date
+            nullable: true
     embedded:
-         score:
-            class: App\Entity\Book\Score    
+        score:
+            class: App\Entity\Book\Score
     manyToMany:
         categories:
             targetEntity: App\Entity\Category
-            cascade: {  }
+            cascade: {}
             fetch: LAZY
             mappedBy: null
             inversedBy: books
             joinTable:
                 name: book_category
                 joinColumns:
-                    -
-                        name: book_id
-                        referencedColumnName: id
-                        onDelete: CASCADE
+                    - name: book_id
+                      referencedColumnName: id
+                      onDelete: CASCADE
                 inverseJoinColumns:
-                    -
-                        name: category_id
-                        referencedColumnName: id
-                        onDelete: CASCADE
+                    - name: category_id
+                      referencedColumnName: id
+                      onDelete: CASCADE
             orderBy: null
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks: {}

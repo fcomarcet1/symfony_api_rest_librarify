@@ -9,7 +9,11 @@ App\Entity\Book:
         description:
             groups: ['book']
         score:
-            groups: ['book']    
+            groups: ['book']
+        readAt:
+            groups: ['book']
+        createdAt:
+            groups: ['book']        
         categories:
             groups: ['book']
         

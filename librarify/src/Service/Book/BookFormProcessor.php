@@ -50,7 +50,6 @@ class BookFormProcessor
 
         if (null === $bookId) {
             // create new book with uuid && create new BookDto
-            $book = Book::create();
             $bookDto = BookDto::createEmpty();
         } else {
             // Get book
@@ -59,8 +58,7 @@ class BookFormProcessor
             $bookDto = BookDto::createFromBook($book);
             // Get categories if exists --> originalCategories
             foreach ($book->getCategories() as $category) {
-                // Create categoryDto from category
-                $categoryDto = CategoryDto::createFromCategory($category);
+                $bookDto->categories[] = CategoryDto::createFromCategory($category);
             }
         }
         // Create new form-> vinculated --> bookDto class
@@ -93,17 +91,28 @@ class BookFormProcessor
             $filename = $this->fileUploader->uploadBase64File($bookDto->base64Image);
         }
 
-        $book->update(
-            $bookDto->getTitle(),
-            $filename,
-            $bookDto->getDescription(),
-            Score::create($bookDto->getScore()),
-            ...$categories
-        );
-
+        if (null === $book) {
+            $book = Book::create(
+                $bookDto->getTitle(),
+                $filename,
+                $bookDto->getDescription(),
+                Score::create($bookDto->getScore()),
+                $bookDto->getReadAt(),
+                ...$categories
+            );
+        } else {
+            $book->update(
+                $bookDto->getTitle(),
+                $filename,
+                $bookDto->getDescription(),
+                Score::create($bookDto->getScore()),
+                $bookDto->getReadAt(),
+                ...$categories
+            );
+        }
         $this->bookRepository->save($book);
 
-        // return [success, error]
+        // [sucess, error];
         return [$book, null];
     }
 }

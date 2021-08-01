@@ -11,7 +11,6 @@ use App\Service\Book\GetBook;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,9 +35,6 @@ class BookController extends AbstractFOSRestController
      */
     public function postAction(BookFormProcessor $bookFormProcessor, Request $request)
     {
-        // create new book with uuid
-        $book = Book::create();
-
         // Call bookFormProcessor service
         [$book, $error] = ($bookFormProcessor)($request);
 
