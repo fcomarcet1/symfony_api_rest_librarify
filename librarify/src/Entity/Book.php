@@ -13,21 +13,14 @@ use Ramsey\Uuid\UuidInterface;
 class Book
 {
     private UuidInterface $id;
-
     private string $title;
-
     private ?string $image;
-
+    private Score $score;
+    private ?string $description;
+    private ?DateTimeInterface $createdAt;
+    private ?DateTimeInterface $readAt;
     /** @var Collection|Category[] */
     private Collection $categories;
-
-    private Score $score;
-
-    private ?string $description;
-
-    private ?DateTimeInterface $createdAt;
-
-    private ?DateTimeInterface $readAt;
 
     public function __construct(
         UuidInterface $uuid,
@@ -48,6 +41,9 @@ class Book
         $this->createdAt = new DateTimeImmutable();
     }
 
+    /**
+     * @param Category ...$categories
+     */
     public static function create(
         string $title,
         ?string $image,
@@ -122,6 +118,11 @@ class Book
         return $this;
     }
 
+    /**
+     * @param Category ...$categories
+     *
+     * @return void
+     */
     public function updateCategories(Category ...$categories)
     {
         /** @var Category[]|ArrayCollection */
@@ -145,6 +146,11 @@ class Book
         }
     }
 
+    /**
+     * @param Category ...$categories
+     *
+     * @return void
+     */
     public function update(
         string $title,
         ?string $image,
