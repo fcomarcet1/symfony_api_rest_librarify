@@ -207,7 +207,7 @@ class Book
         ?string $image,
         ?string $description,
         ?Score $score,
-        DateTimeInterface $readAt,
+        ?DateTimeInterface $readAt,
         array $authors,
         array $categories
     ) {
