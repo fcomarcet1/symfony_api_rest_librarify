@@ -2,9 +2,6 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Category;
-use App\Form\Model\CategoryDto;
-use App\Form\Type\CategoryFormType;
 use App\Repository\CategoryRepository;
 use App\Service\Category\CategoryFormProcessor;
 use App\Service\Category\CheckUniqueCategory;

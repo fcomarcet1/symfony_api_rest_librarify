@@ -9,6 +9,8 @@ use App\Form\Model\CategoryDto;
 use App\Form\Type\BookFormType;
 use App\Model\Exception\Book\BookNotFound;
 use App\Repository\BookRepository;
+use App\Service\Author\CreateAuthor;
+use App\Service\Author\GetAuthor;
 use App\Service\Category\CreateCategory;
 use App\Service\Category\GetCategory;
 use App\Service\FileUploader;
@@ -21,6 +23,8 @@ class BookFormProcessor
     private BookRepository $bookRepository;
     private CreateCategory $createCategory;
     private GetCategory $getCategory;
+    private CreateAuthor $createAuthor;
+    private GetAuthor $getAuthor;
     private FileUploader $fileUploader;
     private FormFactoryInterface $formFactory;
 
@@ -29,6 +33,8 @@ class BookFormProcessor
         BookRepository $bookRepository,
         GetCategory $getCategory,
         CreateCategory $createCategory,
+        CreateAuthor $createAuthor,
+        GetAuthor $getAuthor,
         FileUploader $fileUploader,
         FormFactoryInterface $formFactory
     ) {
@@ -36,6 +42,8 @@ class BookFormProcessor
         $this->bookRepository = $bookRepository;
         $this->createCategory = $createCategory;
         $this->getCategory = $getCategory;
+        $this->createAuthor = $createAuthor;
+        $this->getAuthor = $getAuthor;
         $this->fileUploader = $fileUploader;
         $this->formFactory = $formFactory;
     }
@@ -76,13 +84,27 @@ class BookFormProcessor
         foreach ($bookDto->getCategories() as $newCategoryDto) {
             $category = null;
             if (null !== $newCategoryDto->getId()) {
+                // get category to edit
                 $category = ($this->getCategory)($newCategoryDto->getId());
             }
+            // create category
             if (null === $category) {
                 $category = ($this->createCategory)($newCategoryDto->getName());
             }
             // categorias que ha enviado el user
             $categories[] = $category;
+        }
+
+        $authors = [];
+        foreach ($bookDto->getAuthors() as $newAuthorDto) {
+            $author = null;
+            if (null !== $newAuthorDto->getId()) {
+                $author = ($this->getAuthor)($newAuthorDto->getId());
+            }
+            if (null === $author) {
+                $author = ($this->createAuthor)($newAuthorDto->getName());
+            }
+            $authors[] = $author;
         }
 
         $filename = null;
@@ -98,7 +120,8 @@ class BookFormProcessor
                 $bookDto->getDescription(),
                 Score::create($bookDto->getScore()),
                 $bookDto->getReadAt(),
-                ...$categories
+                $authors,
+                $categories
             );
         } else {
             $book->update(
@@ -107,7 +130,8 @@ class BookFormProcessor
                 $bookDto->getDescription(),
                 Score::create($bookDto->getScore()),
                 $bookDto->getReadAt(),
-                ...$categories
+                $authors,
+                $categories
             );
         }
         $this->bookRepository->save($book);

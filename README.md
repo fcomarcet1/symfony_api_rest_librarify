@@ -9,10 +9,11 @@ API REST empleando FOS Rest Bundle. Esta API nos permitirá gestionar nuestra bi
 - Realizar operaciones CRUD sobre nuestros libros.
 - Realizar operaciones CRUD sobre los autores.
 - Realizar operaciones CRUD sobre las categorías que les asignemos.
-- EN PROCESO
-  - Creación de un administrador mediante **Easy Admin**.
+- Docker.
+- PROXIMAMENTE:
+  - Creación de un administrador mediante **Sonata Admin**.
   - JWT LexikJWTAuthenticationBundle.
-  - Docker.
+  
   
 
 ## Getting Started

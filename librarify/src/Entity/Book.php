@@ -21,6 +21,8 @@ class Book
     private ?DateTimeInterface $readAt;
     /** @var Collection|Category[] */
     private Collection $categories;
+    /** @var Collection|Author[] */
+    private Collection $authors;
 
     public function __construct(
         UuidInterface $uuid,
@@ -29,7 +31,8 @@ class Book
         ?string $description,
         ?Score $score,
         ?DateTimeInterface $readAt,
-        ?Collection $categories
+        ?Collection $categories,
+        ?Collection $authors
     ) {
         $this->id = $uuid;
         $this->title = $title;
@@ -38,19 +41,18 @@ class Book
         $this->score = $score ?? Score::create();
         $this->readAt = $readAt;
         $this->categories = $categories ?? new ArrayCollection();
+        $this->authors = $authors ?? new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
     }
 
-    /**
-     * @param Category ...$categories
-     */
     public static function create(
         string $title,
         ?string $image,
         ?string $description,
         ?Score $score,
         ?DateTimeInterface $readAt,
-        Category ...$categories
+        array $authors,
+        array $categories
     ): self {
         return new self(
             Uuid::uuid4(),
@@ -59,7 +61,8 @@ class Book
             $description,
             $score,
             $readAt,
-            new ArrayCollection($categories)
+            new ArrayCollection($categories),
+            new ArrayCollection($authors)
         );
     }
 
@@ -118,6 +121,36 @@ class Book
         return $this;
     }
 
+    public function getAuthors(): Collection
+    {
+        return $this->authors;
+    }
+
+    public function addAuthor(Author $author): self
+    {
+        if (!$this->authors->contains($author)) {
+            $this->authors[] = $author;
+        }
+
+        return $this;
+    }
+
+    public function removeAuthor(Author $author): self
+    {
+        if ($this->authors->contains($author)) {
+            $this->authors->removeElement($author);
+        }
+
+        return $this;
+    }
+
+    public function setAuthors($authors)
+    {
+        $this->authors = $authors;
+
+        return $this;
+    }
+
     /**
      * @param Category ...$categories
      *
@@ -146,18 +179,37 @@ class Book
         }
     }
 
-    /**
-     * @param Category ...$categories
-     *
-     * @return void
-     */
+    public function updateAuthors(Author ...$authors)
+    {
+        /** @var Author[]|ArrayCollection */
+        $originalAuthors = new ArrayCollection();
+        foreach ($this->authors as $author) {
+            $originalAuthors->add($author);
+        }
+
+        // Remove authors
+        foreach ($originalAuthors as $originalAuthor) {
+            if (!\in_array($originalAuthor, $authors)) {
+                $this->removeAuthor($originalAuthor);
+            }
+        }
+
+        // Add authors
+        foreach ($authors as $newAuthor) {
+            if (!$originalAuthors->contains($newAuthor)) {
+                $this->addAuthor($newAuthor);
+            }
+        }
+    }
+
     public function update(
         string $title,
         ?string $image,
         ?string $description,
         ?Score $score,
         DateTimeInterface $readAt,
-        Category ...$categories
+        array $authors,
+        array $categories
     ) {
         $this->title = $title;
         $this->image = $image;
@@ -165,6 +217,7 @@ class Book
         $this->score = $score;
         $this->readAt = $readAt;
         $this->updateCategories(...$categories);
+        $this->updateAuthors(...$authors);
     }
 
     public function setScore(Score $score): self

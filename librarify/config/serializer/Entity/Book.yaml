@@ -16,4 +16,6 @@ App\Entity\Book:
             groups: ['book']        
         categories:
             groups: ['book']
+        authors:
+            groups: ['book']
         

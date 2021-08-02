@@ -45,7 +45,7 @@ services:
         volumes:
             - ./librarify/:/var/www/librarify/
         ports:
-            - 80:80
+            - 8080:80
         depends_on:
             - db
             - php
@@ -58,7 +58,7 @@ services:
         networks:
             - symfony
         ports:
-            - "8080:80"
+            - "8081:80"
         environment:
             # arbitrary server option - allowing you to specify any MySQL/MariaDB server on the login page
             #- PMA_ARBITRARY=1

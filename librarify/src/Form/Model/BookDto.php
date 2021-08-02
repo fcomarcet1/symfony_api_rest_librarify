@@ -14,6 +14,8 @@ class BookDto
     public ?DateTimeInterface $readAt = null;
     /** @var \App\Form\Model\CategoryDto[]|null */
     public ?array $categories = [];
+    /** @var \App\Form\Model\AuthorDto[]|null */
+    public ?array $authors = [];
 
     public function __construct()
     {
@@ -68,5 +70,13 @@ class BookDto
     public function getReadAt(): ?DateTimeInterface
     {
         return $this->readAt;
+    }
+
+    /**
+     * @return \App\Form\Model\AuthorDto[]|null
+     */
+    public function getAuthors(): ?array
+    {
+        return $this->authors;
     }
 }
