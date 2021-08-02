@@ -213,6 +213,9 @@ class Book
     ) {
         $this->title = $title;
         $this->image = $image;
+        if (null !== $image) {
+            $this->image = $image;
+        }
         $this->description = $description;
         $this->score = $score;
         $this->readAt = $readAt;

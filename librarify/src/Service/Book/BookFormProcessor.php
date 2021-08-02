@@ -126,7 +126,7 @@ class BookFormProcessor
         } else {
             $book->update(
                 $bookDto->getTitle(),
-                $filename,
+                null === $filename ? $book->getImage() : $filename,
                 $bookDto->getDescription(),
                 Score::create($bookDto->getScore()),
                 $bookDto->getReadAt(),
