@@ -37,6 +37,13 @@ prepare: ## Runs backend commands
 composer-install: ## Installs composer dependencies
 	U_ID=${UID} docker exec --user ${UID} -it ${DOCKER_BE} composer install --no-scripts --no-interaction --optimize-autoloader
 
+composer-update: ## Update composer dependencies
+	U_ID=${UID} docker exec --user ${UID} -it ${DOCKER_BE} composer update --no-scripts --no-interaction --optimize-autoloader
+
+cache-clear: ## Installs composer dependencies
+	U_ID=${UID} docker exec --user ${UID} -it ${DOCKER_BE} php bin/console cache:clear
+
+
 migrations: ## Runs the migrations
 	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} bin/console doctrine:migrations:migrate -n
 
