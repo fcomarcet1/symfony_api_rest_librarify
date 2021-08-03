@@ -61,7 +61,6 @@ class AuthorController extends AbstractFOSRestController
         $issetAuthor = ($checkUniqueAuthor)($request->get('name'));
         if (!$issetAuthor) {
             $data = ['message' => 'This author already exists.'];
-
             return View::create($data, Response::HTTP_OK);
         }
 
