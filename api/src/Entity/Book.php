@@ -45,27 +45,6 @@ class Book
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public static function create(
-        string $title,
-        ?string $image,
-        ?string $description,
-        ?Score $score,
-        ?DateTimeInterface $readAt,
-        array $authors,
-        array $categories
-    ): self {
-        return new self(
-            Uuid::uuid4(),
-            $title,
-            $image,
-            $description,
-            $score,
-            $readAt,
-            new ArrayCollection($categories),
-            new ArrayCollection($authors)
-        );
-    }
-
     public function getId(): UuidInterface
     {
         return $this->id;
@@ -177,6 +156,27 @@ class Book
                 $this->addCategory($newCategory);
             }
         }
+    }
+
+    public static function create(
+        string $title,
+        ?string $image,
+        ?string $description,
+        ?Score $score,
+        ?DateTimeInterface $readAt,
+        array $authors,
+        array $categories
+    ): self {
+        return new self(
+            Uuid::uuid4(),
+            $title,
+            $image,
+            $description,
+            $score,
+            $readAt,
+            new ArrayCollection($categories),
+            new ArrayCollection($authors)
+        );
     }
 
     public function updateAuthors(Author ...$authors)
