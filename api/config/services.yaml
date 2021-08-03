@@ -23,3 +23,24 @@ services:
     App\Security\ApiKeyAuthenticator:
         arguments:
             $appApiToken: '%app.api_token%'
+
+    admin.category:
+        class: App\Admin\CategoryAdmin
+        arguments: [~, App\Entity\Category, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Category }
+        public: true
+
+    admin.author:
+        class: App\Admin\AuthorAdmin
+        arguments: [~, App\Entity\Author, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Author }
+        public: true
+
+    admin.book:
+        class: App\Admin\BookAdmin
+        arguments: [~, App\Entity\Book, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Book }
+        public: true
