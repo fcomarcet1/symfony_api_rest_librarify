@@ -1,7 +1,0 @@
-App\Entity\Author:
-    attributes:
-        id:
-            groups: ['book']
-        name:
-            groups: ['book']
-        
