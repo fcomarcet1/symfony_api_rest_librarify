@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Entity\Book\Score;
+use App\Event\Book\BookCreatedEvent;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class Book
 {
@@ -23,6 +25,7 @@ class Book
     private Collection $categories;
     /** @var Collection|Author[] */
     private Collection $authors;
+    private array $domainEvents;
 
     public function __construct(
         UuidInterface $uuid,
@@ -45,6 +48,16 @@ class Book
         $this->createdAt = new DateTimeImmutable();
     }
 
+    public function addDomainEvent(Event $event): void
+    {
+        $this->domainEvents[] = $event;
+    }
+
+    public function pullDomainEvents(): array
+    {
+        return $this->domainEvents;
+    }
+
     public function getId(): UuidInterface
     {
         return $this->id;
@@ -62,6 +75,11 @@ class Book
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
@@ -72,6 +90,33 @@ class Book
         $this->image = $image;
 
         return $this;
+    }
+
+    public function setScore(Score $score): self
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    public function getScore(): Score
+    {
+        return $this->score;
+    }
+
+    public function getAuthors(): Collection
+    {
+        return $this->authors;
+    }
+
+    public function getReadAt(): ?DateTimeInterface
+    {
+        return $this->readAt;
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
     }
 
     /**
@@ -98,11 +143,6 @@ class Book
         }
 
         return $this;
-    }
-
-    public function getAuthors(): Collection
-    {
-        return $this->authors;
     }
 
     public function addAuthor(Author $author): self
@@ -167,7 +207,7 @@ class Book
         array $authors,
         array $categories
     ): self {
-        return new self(
+        $book = new self(
             Uuid::uuid4(),
             $title,
             $image,
@@ -177,6 +217,11 @@ class Book
             new ArrayCollection($categories),
             new ArrayCollection($authors)
         );
+
+        // event created book
+        $book->addDomainEvent(new BookCreatedEvent($book->getId()));
+
+        return $book;
     }
 
     public function updateAuthors(Author ...$authors)
@@ -223,28 +268,6 @@ class Book
         $this->updateAuthors(...$authors);
     }
 
-    public function setScore(Score $score): self
-    {
-        $this->score = $score;
-
-        return $this;
-    }
-
-    public function getScore(): Score
-    {
-        return $this->score;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getCreatedAt(): ?DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
     public function isRead(): ?bool
     {
         return null === $this->readAt ? false : true;
@@ -255,11 +278,6 @@ class Book
         $this->readAt = $readAt;
 
         return $this;
-    }
-
-    public function getReadAt(): ?DateTimeInterface
-    {
-        return $this->readAt;
     }
 
     public function __toString()

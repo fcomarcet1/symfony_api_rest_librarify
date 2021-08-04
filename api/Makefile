@@ -24,6 +24,12 @@ run: ## Start the containers
 stop: ## Stop the containers
 	U_ID=${UID} docker-compose stop
 
+down: ## Stop & remove the containers
+	U_ID=${UID} docker-compose down
+
+kill: ## Kill the containers
+	U_ID=${UID} docker-compose kill
+
 restart: ## Restart the containers
 	$(MAKE) stop && $(MAKE) run
 
@@ -40,7 +46,7 @@ composer-install: ## Installs composer dependencies
 composer-update: ## Update composer dependencies
 	U_ID=${UID} docker exec --user ${UID} -it ${DOCKER_BE} composer update --no-scripts --no-interaction --optimize-autoloader
 
-cache-clear: ## Installs composer dependencies
+cache-clear: ## Clear Symfony cache
 	U_ID=${UID} docker exec --user ${UID} -it ${DOCKER_BE} php bin/console cache:clear
 
 

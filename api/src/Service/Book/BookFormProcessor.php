@@ -16,6 +16,7 @@ use App\Service\Category\GetCategory;
 use App\Service\FileUploader;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class BookFormProcessor
 {
@@ -27,6 +28,7 @@ class BookFormProcessor
     private GetAuthor $getAuthor;
     private FileUploader $fileUploader;
     private FormFactoryInterface $formFactory;
+    private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
         GetBook $getBook,
@@ -36,7 +38,8 @@ class BookFormProcessor
         CreateAuthor $createAuthor,
         GetAuthor $getAuthor,
         FileUploader $fileUploader,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->getBook = $getBook;
         $this->bookRepository = $bookRepository;
@@ -46,6 +49,7 @@ class BookFormProcessor
         $this->getAuthor = $getAuthor;
         $this->fileUploader = $fileUploader;
         $this->formFactory = $formFactory;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -114,6 +118,7 @@ class BookFormProcessor
         }
 
         if (null === $book) {
+            // Create new book
             $book = Book::create(
                 $bookDto->getTitle(),
                 $filename,
@@ -124,6 +129,7 @@ class BookFormProcessor
                 $categories
             );
         } else {
+            // update existing book
             $book->update(
                 $bookDto->getTitle(),
                 null === $filename ? $book->getImage() : $filename,
@@ -134,7 +140,13 @@ class BookFormProcessor
                 $categories
             );
         }
+        // save book to database
         $this->bookRepository->save($book);
+
+        // launch created book event
+        foreach ($book->pullDomainEvents() as $event) {
+            $this->eventDispatcher->dispatch($event);
+        }
 
         // [sucess, error];
         return [$book, null];

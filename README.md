@@ -9,9 +9,8 @@ API REST empleando FOS Rest Bundle. Esta API nos permitirá gestionar nuestra bi
 - Realizar operaciones CRUD sobre nuestros libros.
 - Realizar operaciones CRUD sobre los autores.
 - Realizar operaciones CRUD sobre las categorías que les asignemos.
-- Docker.
+- Administracion mediante **Sonata Admin**.
 - PROXIMAMENTE:
-  - Creación de un administrador mediante **Sonata Admin**.
   - JWT LexikJWTAuthenticationBundle.
   
   
@@ -19,10 +18,10 @@ API REST empleando FOS Rest Bundle. Esta API nos permitirá gestionar nuestra bi
 ## Getting Started
 
 1. Clona el repositorio.
-2. Asegúrate de tener un servidor MySQL corriendo en tu ordenador.
-3. Ejecuta `composer install` en la raíz del proyecto.
-4. Instala las migraciones de base de datos: `bin/console doctrine:migrations:migrate`.
-5. Levanta el servidor local de desarrollo: `symfony server:start`.
+2. Ejecuta `make run` para levantar los contenedores(nginx + php8.0 + MySQL8)
+3. Ejecuta `make composer-install` en la raíz del proyecto.
+4. Instala las migraciones de base de datos: `make migrations`.
+5. Accede el servidor local de desarrollo para comprobar que funciona correctamente: `http://localhost:250`.
 6. Happy codding!
 
 
