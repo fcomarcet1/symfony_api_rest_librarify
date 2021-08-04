@@ -24,8 +24,6 @@ class BookController extends AbstractFOSRestController
      */
     public function getAction(BookRepository $bookRepository): array
     {
-        dump($bookRepository->findAll());
-
         return $bookRepository->findAll();
     }
 
@@ -39,9 +37,8 @@ class BookController extends AbstractFOSRestController
     {
         // Call bookFormProcessor service
         [$book, $error] = ($bookFormProcessor)($request);
-
-        $statusCode = $book ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
         $data = $book ?? $error;
+        $statusCode = $book ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
 
         return View::create($data, $statusCode);
     }

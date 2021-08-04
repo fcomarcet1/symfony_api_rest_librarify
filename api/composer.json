@@ -90,6 +90,7 @@
         }
     },
     "require-dev": {
+        "ekino/phpstan-banned-code": "^0.4.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.93",
         "phpstan/phpstan-doctrine": "^0.12.42",

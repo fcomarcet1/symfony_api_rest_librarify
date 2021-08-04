@@ -78,6 +78,6 @@ class Category
 
     public function __toString()
     {
-        return $this->title ?? 'Categoría';
+        return $this->name ?? 'Categoría';
     }
 }
