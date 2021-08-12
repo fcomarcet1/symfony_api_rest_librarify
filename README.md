@@ -10,7 +10,8 @@ API REST empleando FOS Rest Bundle. Esta API nos permitirá gestionar nuestra bi
 - Realizar operaciones CRUD sobre los autores.
 - Realizar operaciones CRUD sobre las categorías que les asignemos.
 - Administracion mediante **Sonata Admin**.
-- PROXIMAMENTE:
+- WORKING:
+  - Get books from external API -> ISBN 
   - JWT LexikJWTAuthenticationBundle.
   
   
