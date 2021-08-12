@@ -73,9 +73,19 @@ class BookFormProcessor
                 $bookDto->categories[] = CategoryDto::createFromCategory($category);
             }
         }
+
+        $content = json_decode($request->getContent(), true);
+
         // Create new form-> vinculated --> bookDto class
+
+        // POST method
+        // $form = $this->formFactory->create(BookFormType::class, $bookDto);
+        // $form->handleRequest($request);
+
+        // PUT method
+        $content = json_decode($request->getContent(), true);
         $form = $this->formFactory->create(BookFormType::class, $bookDto);
-        $form->handleRequest($request);
+        $form->submit($content);
         if (!$form->isSubmitted()) {
             // return [success, error]
             return [null, 'Form is not submitted'];

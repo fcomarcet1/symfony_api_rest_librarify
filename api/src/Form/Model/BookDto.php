@@ -33,8 +33,8 @@ class BookDto
         $dto = new self();
         $dto->title = $book->getTitle();
         $dto->score = $book->getScore()->getValue();
-        /* $dto->description = $book->getDescription();
-        $dto->score = $book->getScore(); */
+        $dto->description = $book->getDescription();
+        $dto->readAt = $book->getReadAt();
 
         return $dto;
     }
