@@ -5,6 +5,7 @@ use PhpCsFixer\Fixer\FunctionNotation\MethodArgumentSpaceFixer;
 use PhpCsFixer\Fixer\FunctionNotation\NativeFunctionInvocationFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\EasyCodingStandard\ValueObject\Option;
+use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -21,6 +22,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'scope' => 'namespaced',
             'include' => ['@compiler_optimized']
         ]]);
+
+    $services->set(NoUnusedImportsFixer::class);    
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PATHS, [__DIR__ . '/src']);

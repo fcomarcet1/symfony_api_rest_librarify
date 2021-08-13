@@ -24,6 +24,10 @@ services:
         arguments:
             $appApiToken: '%app.api_token%'
 
+    # Custom Interfaces
+    App\Service\Utils\HttpClientInterface: '@App\Service\Utils\HttpClient'        
+
+    # Sonata Admin
     admin.category:
         class: App\Admin\CategoryAdmin
         arguments: [~, App\Entity\Category, ~]
