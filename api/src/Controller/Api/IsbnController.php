@@ -6,6 +6,7 @@ namespace App\Controller\Api;
 
 use App\Service\Isbn\GetBookByIsbn;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

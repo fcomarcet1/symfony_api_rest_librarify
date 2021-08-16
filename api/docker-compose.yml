@@ -53,6 +53,22 @@ services:
     networks:
       - symfony-api-rest-network
 
+  symfony-api-rest-phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: symfony-api-rest-phpmyadmin
+    networks:
+      - symfony-api-rest-network
+    ports:
+      - "251:80"
+    environment:
+      # arbitrary server option - allowing you to specify any MySQL/MariaDB server on the login page
+      #- PMA_ARBITRARY=1
+      - PMA_HOST=symfony-api-rest-db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    depends_on:
+      - symfony-api-rest-db
+
 volumes:
   symfony-api-rest-db-data:
 
