@@ -25,7 +25,35 @@ services:
             $appApiToken: '%app.api_token%'
 
     # Custom Interfaces
-    App\Service\Utils\HttpClientInterface: '@App\Service\Utils\HttpClient'        
+    App\Service\Utils\HttpClientInterface: '@App\Service\Utils\HttpClient' 
+    
+    # Custom JWT payload.  
+    App\EventListener\JWTCreatedListener:
+        arguments: ['@request_stack']
+        tags:
+            - {
+                name: kernel.event_listener,
+                event: lexik_jwt_authentication.on_jwt_created,
+                method: onJWTCreated
+            }
+    # Custom JWT listener check IP.         
+    App\EventListener\JWTDecodedListener:
+        arguments: ['@request_stack']
+        tags:
+            - {
+                name: kernel.event_listener,
+                event: lexik_jwt_authentication.on_jwt_decoded,
+                method: onJWTDecoded
+            }
+    # Custom JWT response on authentication success.          
+    App\EventListener\JWTAuthenticationSuccessListener:
+        tags:
+            - {
+                name: kernel.event_listener,
+                event: lexik_jwt_authentication.on_authentication_success,
+                method: onAuthenticationSuccessResponse,
+                priority: -1000,
+            } 
 
     # Sonata Admin
     admin.category:

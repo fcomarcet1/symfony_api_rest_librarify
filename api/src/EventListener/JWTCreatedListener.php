@@ -32,7 +32,7 @@ class JWTCreatedListener
 
         $payload['sub'] = $user->getId();
         $payload['ip'] = $request->getClientIp();
-        $payload['iat'] = time();
+        //$payload['iat'] = time();
 
         $event->setData($payload);
     }

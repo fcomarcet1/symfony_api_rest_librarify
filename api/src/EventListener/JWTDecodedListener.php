@@ -25,10 +25,5 @@ class JWTDecodedListener
         if (!isset($payload['ip']) || $payload['ip'] !== $request->getClientIp()) {
             $event->markAsInvalid();
         }
-
-        // Check if token has expired
-       /*  if (!isset($payload['exp'])) {
-            $event->markAsInvalid();
-        } */
     }
 }
