@@ -15,6 +15,10 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        refresh:
+            pattern: ^/api/token/refresh
+            stateless: true
+               
         login:
             pattern: ^/api/login
             stateless: true
@@ -29,14 +33,10 @@ security:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
-        # allow unauthenticated users to access the login form
-        #- { path: ^/admin/login, roles: PUBLIC_ACCESS }
-
-        # but require authentication for all other admin routes
+         # Note: Only the *first* access control that matches will be used
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api, roles: ROLE_USER }
+        - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
